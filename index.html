@@ -552,6 +552,10 @@
 
         <!-- EVENT DETAILS -->
         <h3>Event Info</h3>
+        
+        <h3>Event Image</h3>
+        <input type="file" id="event-image-input" accept="image/*">
+
         <input type="text" value="wed . Mar 12, 2025 . 07:30">
         <input type="text" value="Tyler.. The Creator">
         <input type="text" value="CHROMAKOPIA: THE WORLD TOUR">
@@ -613,7 +617,7 @@
             { input: 11, target: "parking-text" }
         ];
 
-        const inputs = form.querySelectorAll("input, textarea");
+        const inputs = form.querySelectorAll("input:not([type='file']), textarea");
 
         /* ---------- LOAD FROM LOCALSTORAGE ---------- */
         const savedData = JSON.parse(localStorage.getItem("ticketData"));
@@ -659,6 +663,43 @@
                 `My Safe Tix<sup> TM </sup> (${count})`;
         }
     });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const img = document.getElementById("event-image");
+        const fileInput = document.getElementById("event-image-input");
+
+        /* ---------- LOAD SAVED IMAGE ---------- */
+        const savedImage = localStorage.getItem("eventImage");
+        if (savedImage) {
+            img.src = savedImage;
+        }
+
+        /* ---------- CLICK IMAGE TO UPLOAD ---------- */
+        // img.addEventListener("click", () => {
+        //     fileInput.click();
+        // });
+
+        /* ---------- HANDLE IMAGE UPLOAD ---------- */
+        fileInput.addEventListener("change", () => {
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                img.src = reader.result;
+                localStorage.setItem("eventImage", reader.result);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        /* ---------- CLEAR IMAGE ON RESET ---------- */
+        const clearBtn = document.getElementById("clear-btn");
+        clearBtn.addEventListener("click", () => {
+            localStorage.removeItem("eventImage");
+        });
+    });
+
+
 
     document.addEventListener("DOMContentLoaded", () => {
         const clearBtn = document.getElementById("clear-btn");
