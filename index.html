@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Ticketmaster</title>
+
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            font-family: Averta, helvetica, arial, sans-serif;
+        }
+
+        body{
+            font-size: var(--rainier-font-size, 16px);
+            letter-spacing: 0.02em;
+            font-weight: 400;
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+            color: rgb(18, 18, 18);
+            font-family: Averta, helvetica, arial, sans-serif;
+            line-height: 1.4;
+            text-size-adjust: none;
+            -webkit-font-smoothing: antialiased;
+        }
+
+
+        .header{
+            background-color: rgb(2, 77, 223);
+            color: white;
+            display: flex;
+            padding: 30px 20px;
+        }
+
+        /* ---------- HEADER ---------- */
+        .header {
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .header h1:first-child {
+            font-size: 22px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .event {
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* ---------- LAYOUT ---------- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* Fixed header */
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 45px; /* full header height */
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            z-index: 1000;
+            transition: height 0.3s ease;
+            overflow: hidden;
+        }
+
+        /* Push content below fixed header */
+        #container {
+            margin-top: 120px;
+        }
+
+        /* Header content animation */
+        #header-back,
+        #header-title {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Collapsed state */
+        #header.collapsed {
+            height: 20px; /* half stays visible */
+        }
+
+        #header.collapsed #header-back,
+        #header.collapsed #header-title {
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+        }
+
+        .head p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        /* ---------- MAIN CARD ---------- */
+        .mainInfo {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .genre{
+           font-size: 14px;
+           font-weight: 700; 
+           margin-top: 10px;
+        }
+
+        /* ---------- EVENT INFO ---------- */
+        .eventinfo {
+            display: flex;
+            gap: 14px;
+            background: #fff;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .eventinfo img {
+            width: 160px;
+            height: 50px;
+            background: #eaeaea;
+        }
+
+        .det p:nth-child(1) {
+            font-size: 15px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .det p:nth-child(2) {
+            font-size: 15px;
+            font-weight: 300;
+            color: #05539e;
+        }
+
+        .det p:nth-child(3) {
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 12px;
+            color: #05539e;
+        }
+
+        .det p:nth-child(4) {
+            font-size: 13px;
+            font-weight: 600;
+            color: #05539e;
+        }
+
+        /* ---------- TICKET PREVIEW ---------- */
+        .ticketprev {
+            background: #ffffff;
+            border: 2px solid #c281ea;
+            padding: 19px;
+            border-radius: 10px;
+        }
+
+        .ticketprev p:first-child {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #8346a9;;
+        }
+
+        .ticketprev div{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ticketprev div span:nth-child(1){
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 60px;
+            border: 2px solid ;
+            color: #cb80fa;
+            font-size: 35px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .ticketprev p {
+            font-size: 15px;
+            color: #333;
+        }
+
+        .ticketprev p span{
+          font-size: 35px;
+        }
+
+        .ticketprev button {
+            margin-top: 12px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: rgb(2, 77, 223);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .ticketprev button:hover {
+            background: rgb(1, 60, 180);
+        }
+
+        /* ---------- TRANSFER ---------- */
+        .tickettransfer {
+            background: #fff;
+            padding: 14px;
+            /* box-shadow: 0 2px 10px rgba(0,0,0,0.05); */
+        }
+
+        .timg{
+            display: flex;
+            margin: 20px 0 60px 0;
+        }
+
+        .in{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            color: #05539e;
+        }
+
+        .tickettransfer img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .tickettransfer p:first-of-type {
+            text-align: right;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tickettransfer p:first-of-type span{
+            color: #05539e;
+        }
+
+        /* ---------- SEATS ---------- */
+        .seatsinfo {
+            background: #fff;
+            padding: 16px;
+        }
+
+        .seatsinfo div{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .seatsinfo h2 {
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+
+        sup{
+            font-size: 0.6rem;
+            vertical-align: super;
+        }
+
+        .seatsinfo p {
+            font-size: 14px;
+            margin: 35px 0;
+        }
+
+        .seatsinfo a {
+            color: rgb(2, 77, 223);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* ---------- CONCLUSION ---------- */
+        .conclusion {
+            background: #fff;
+            padding: 16px;
+        }
+
+        .conclusion h2 {
+            font-size: 19px;
+            margin-bottom: 9px;
+            font-weight: 400;
+        }
+
+        .conclusion p {
+            font-size: 15px;
+            color: #555;
+        }
+
+        .conclusion div {
+            display: flex;
+            gap: 40px;
+            margin-top: 39px;
+            width: 240px;
+        }
+
+        .conclusion div p{
+            font-size: 16px;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .conclusion img {
+            width: 50px;
+            height: 50px;
+            background: #eaeaea;
+            border-radius: 8px;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (min-width: 768px) {
+            .eventinfo {
+                align-items: center;
+            }
+
+            .ticketprev button {
+                width: auto;
+                padding: 12px 24px;
+            }
+        }
+
+
+                /* Wrapper */
+        .con {
+            display: none;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        /* Form container */
+        #text-editor {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            font-family: Averta, Helvetica, Arial, sans-serif;
+        }
+
+        /* Section titles */
+        #text-editor h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #024ddf;
+            margin-top: 20px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Inputs & textarea */
+        #text-editor input,
+        #text-editor textarea {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: 1px solid #dcdcdc;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            font-family: inherit;
+            color: #121212;
+            background: #fafafa;
+        }
+
+        /* Textarea specific */
+        #text-editor textarea {
+            resize: vertical;
+            min-height: 80px;
+            line-height: 1.5;
+        }
+
+        /* Focus state */
+        #text-editor input:focus,
+        #text-editor textarea:focus {
+            border-color: #024ddf;
+            box-shadow: 0 0 0 3px rgba(2, 77, 223, 0.15);
+            background: #ffffff;
+        }
+
+        /* Spacing between grouped inputs */
+        #text-editor h3 + input,
+        #text-editor h3 + textarea {
+            margin-top: 4px;
+        }
+
+        /* Mobile-friendly */
+        /* @media (max-width: 600px) {
+            div {
+                margin: 20px;
+                padding: 0;
+            }
+
+            #text-editor {
+                padding: 18px;
+            }
+        } */
+
+        #save-btn, #clear-btn {
+            margin-top: 20px;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            background: rgb(2, 77, 223);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #save-btn:hover {
+            background: rgb(1, 60, 180);
+        }
+
+
+    </style>
+
+</head>
+<body>
+    <div class="header" id="header">
+    <h1 id="header-back">
+        <i class="fa fa-chevron-left" aria-hidden="true" id="icon-back"></i>
+    </h1>
+    <h1 class="event" id="header-title">Event Details</h1>
+    <div id="header-spacer"></div>
+</div>
+
+<div class="container" id="container">
+    <div class="head" id="breadcrumb">
+        <p id="breadcrumb-text">My Account > My Event > Event Details</p>
+    </div>
+
+    <div class="mainInfo" id="main-info">
+        <p class="genre" id="event-genre">Hip-Hop/rap: Tyler, The Creator Tickets</p>
+
+        <div class="eventinfo" id="event-info">
+            <img src="img/tyler.avif" alt="event preview" id="event-image">
+            <div class="det" id="event-details">
+                <p id="event-date">wed . Mar 12, 2025 . 07:30</p>
+                <p id="event-artist">Tyler.. The Creator</p>
+                <p id="event-tour">CHROMAKOPIA: THE WORLD TOUR</p>
+                <p id="event-location">
+                    Share You're Going <br><br>
+                    Phoenix, AZ PHX Arena [fomerly Footprint Center]
+                </p>
+            </div>
+        </div>
+
+        <div class="ticketprev" id="ticket-preview">
+            <p id="ticket-preview-title">Get Your Ticket Ready</p>
+            <div id="ticket-preview-info">
+                <span id="ticket-preview-icon">
+                    <i class="fa fa-mobile" aria-hidden="true" id="icon-mobile"></i>
+                </span>
+                <p id="ticket-preview-text">
+                    For the fastest way in, view and save your ticket to Apple Wallet to beat busy network connections
+                </p>
+            </div>
+            <button id="ticket-preview-button">View & Save Ticket</button>
+        </div>
+
+        <div class="tickettransfer" id="ticket-transfer">
+            <div class="timg" id="ticket-transfer-images">
+                <div class="in" id="ticket-transfer-send">
+                    <img src="img/send icon.jpg" alt="" id="send-icon">
+                    <p id="transfer-text">Transfer Tickets</p>
+                </div>
+                <div class="in" id="ticket-transfer-empty"></div>
+            </div>
+            <p id="ticket-transfer-help">
+                <span id="ticket-transfer-help-icon">
+                    <i class="fa fa-question-circle" aria-hidden="true" id="icon-question"></i>
+                </span>
+                How Do I Manage My Tickets?
+            </p>
+        </div>
+
+        <div class="seatsinfo" id="seats-info">
+            <div id="seats-header">
+                <h2 id="seats-title">My Safe Tix<sup id="safe-tix-sup"> TM </sup> (3)</h2>
+                <p id="view-map">
+                    <span id="map-icon">
+                        <i class="fa fa-map-marker" aria-hidden="true" id="icon-map"></i>
+                    </span>
+                    View map
+                </p>
+            </div>
+
+            <p id="seat-1">
+                <span id="ticket-icon-1">
+                    <i class="fa fa-ticket" aria-hidden="true" id="icon-ticket-1"></i>
+                </span>
+                Sec 114, Row 17, Seat 1
+            </p>
+
+            <p id="seat-2">
+                <span id="ticket-icon-2">
+                    <i class="fa fa-ticket" aria-hidden="true" id="icon-ticket-2"></i>
+                </span>
+                Sec 114, Row 17, Seat 2
+            </p>
+
+            <p id="seat-3">
+                <span id="ticket-icon-3">
+                    <i class="fa fa-ticket" aria-hidden="true" id="icon-ticket-3"></i>
+                </span>
+                Sec 114, Row 17, Seat 3
+            </p>
+
+            <p id="order-help">
+                Can't find something you've purchase? Check your order confirmation email or
+                <a href="" id="view-orders-link">View your Order's</a>
+            </p>
+        </div>
+
+        <div class="conclusion" id="conclusion">
+            <h2 id="conclusion-title">Kait. Get Ready For Hip-Hop/Rap: Tyler, The Creator Tickets</h2>
+            <p id="conclusion-subtitle">Plan ahead and take advantage of these great offers</p>
+            <div id="parking-offer">
+                <img src="img/tape icon.webp" alt="logo4" id="parking-icon">
+                <p id="parking-text">Tyler, The Creator Tickets Parking - Hip-Hop/Rap</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="con" id="con">
+    <form id="text-editor">
+
+        <!-- GENRE -->
+        <h3>Genre</h3>
+        <input type="text" value="Hip-Hop/rap: Tyler, The Creator Tickets">
+
+        <!-- EVENT DETAILS -->
+        <h3>Event Info</h3>
+        <input type="text" value="wed . Mar 12, 2025 . 07:30">
+        <input type="text" value="Tyler.. The Creator">
+        <input type="text" value="CHROMAKOPIA: THE WORLD TOUR">
+        <textarea rows="3">Share You're Going
+
+    Phoenix, AZ PHX Arena [fomerly Footprint Center]</textarea>
+
+        <!-- SEATS -->
+        <h3>Seats</h3>
+        <input type="text" value="3">
+        <input type="text" value="Sec 114, Row 17, Seat 1">
+        <input type="text" value="Sec 114, Row 17, Seat 2">
+        <input type="text" value="Sec 114, Row 17, Seat 3">
+
+        <!-- CONCLUSION -->
+        <h3>Conclusion</h3>
+        <input type="text" value="Kait. Get Ready For Hip-Hop/Rap: Tyler, The Creator Tickets">
+        <input type="text" value="Plan ahead and take advantage of these great offers">
+        <input type="text" value="Tyler, The Creator Tickets Parking - Hip-Hop/Rap">
+
+        <button type="submit" id="save-btn">Save Changes</button>
+        <button type="button" id="clear-btn">Reset to Default</button>
+
+
+    </form>
+
+</div>
+
+<script>
+    const header = document.getElementById("header");
+    const collapsePoint = header.offsetHeight / 2;
+
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > collapsePoint) {
+            header.classList.add("collapsed");
+        } else {
+            header.classList.remove("collapsed");
+        }
+    });
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const form = document.getElementById("text-editor");
+
+        /* Map inputs → page elements */
+        const fields = [
+            { input: 0, target: "event-genre" },
+            { input: 1, target: "event-date" },
+            { input: 2, target: "event-artist" },
+            { input: 3, target: "event-tour" },
+            { input: 4, target: "event-location", isTextarea: true },
+
+            { input: 5, target: "safe-tix-count" }, // derived
+            { input: 6, target: "seat-1" },
+            { input: 7, target: "seat-2" },
+            { input: 8, target: "seat-3" },
+
+            { input: 9, target: "conclusion-title" },
+            { input: 10, target: "conclusion-subtitle" },
+            { input: 11, target: "parking-text" }
+        ];
+
+        const inputs = form.querySelectorAll("input, textarea");
+
+        /* ---------- LOAD FROM LOCALSTORAGE ---------- */
+        const savedData = JSON.parse(localStorage.getItem("ticketData"));
+
+        if (savedData) {
+            inputs.forEach((input, i) => {
+                if (savedData[i] !== undefined) {
+                    input.value = savedData[i];
+                }
+            });
+            applyValues();
+        }
+
+        /* ---------- SAVE ON SUBMIT ---------- */
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const values = Array.from(inputs).map(input => input.value);
+            localStorage.setItem("ticketData", JSON.stringify(values));
+
+            applyValues();
+            alert("Changes saved successfully!");
+        });
+
+        /* ---------- APPLY VALUES TO PAGE ---------- */
+        function applyValues() {
+            fields.forEach(field => {
+                const value = inputs[field.input].value;
+                const el = document.getElementById(field.target);
+
+                if (!el) return;
+
+                if (field.target.startsWith("seat")) {
+                    el.innerHTML = `<i class="fa fa-ticket"></i> ${value}`;
+                } else {
+                    el.innerText = value;
+                }
+            });
+
+            /* Update SafeTix count */
+            const count = inputs[5].value || "0";
+            document.getElementById("seats-title").innerHTML =
+                `My Safe Tix<sup> TM </sup> (${count})`;
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const clearBtn = document.getElementById("clear-btn");
+
+        clearBtn.addEventListener("click", () => {
+            // Remove ONLY your app's data
+            localStorage.removeItem("ticketData");
+
+            // Reload page to restore default HTML values
+            location.reload();
+        });
+    });
+
+    // reveal or close editor
+
+    document.addEventListener("DOMContentLoaded", () => {
+        var count = 0
+        const tapeicon = document.getElementById
+        ('parking-icon');
+
+        tapeicon.addEventListener('click', () => {
+            count++
+            console.log(count)
+            const con = document.getElementById('con');
+
+            if(count == 3) {
+                con.style.display = 'block'
+            } else if(count == 5) {
+                con.style.display = 'none';
+                count = 0
+            }
+        })
+    })
+
+</script>
+
+</body>
+</html>
